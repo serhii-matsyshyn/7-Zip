@@ -288,7 +288,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
         return 0;
     }
     appLaunched = GetTextConfigValue(pairs, "RunProgram");
-    
+
     #ifdef MY_SHELL_EXECUTE
     executeFile = GetTextConfigValue(pairs, "ExecuteFile");
     executeParameters = GetTextConfigValue(pairs, "ExecuteParameters");
@@ -321,7 +321,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
     UString errorMessage;
     HRESULT result = ExtractArchive(codecs, fullPath, tempDirPath, showProgress,
       extractDialogText, isCorrupt, errorMessage);
-    
+
     if (result != S_OK)
     {
       if (!assumeYes)
@@ -347,7 +347,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
   if (!SetCurrentDir(tempDirPath))
     return 1;
   #endif
-  
+
   HANDLE hProcess = NULL;
 #ifdef MY_SHELL_EXECUTE
   if (!executeFile.IsEmpty())
@@ -389,7 +389,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
     }
     hProcess = execInfo.hProcess;
   }
-  else
+  else if (!appLaunched.IsEmpty())
 #endif
   {
     if (appLaunched.IsEmpty())
@@ -402,13 +402,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
         return 1;
       }
     }
-    
+
     {
       FString s2 = tempDirPath;
       NName::NormalizeDirPathPrefix(s2);
       appLaunched.Replace(L"%%T" WSTRING_PATH_SEPARATOR, fs2us(s2));
     }
-    
+
     const UString appNameForError = appLaunched; // actually we need to rtemove parameters also
 
     appLaunched.Replace(L"%%T", fs2us(tempDirPath));
@@ -426,11 +426,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
     startupInfo.dwFlags = 0;
     startupInfo.cbReserved2 = 0;
     startupInfo.lpReserved2 = NULL;
-    
+
     PROCESS_INFORMATION processInformation;
-    
+
     const CSysString appLaunchedSys (GetSystemString(dirPrefix + appLaunched));
-    
+
     const BOOL createResult = CreateProcess(NULL,
         appLaunchedSys.Ptr_non_const(),
         NULL, NULL, FALSE, 0, NULL, NULL /*tempDir.GetPath() */,
@@ -453,5 +453,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
     WaitForSingleObject(hProcess, INFINITE);
     ::CloseHandle(hProcess);
   }
+
+  MessageBoxW(NULL, L"Success.", L"7-Zip SFX", MB_OK | MB_ICONINFORMATION);
+
   return 0;
 }
