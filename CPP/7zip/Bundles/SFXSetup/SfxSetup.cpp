@@ -336,7 +336,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
         {
           if (errorMessage.IsEmpty())
             errorMessage = NError::MyFormatMessage(result);
-          ::MessageBoxW(NULL, errorMessage, NWindows::MyLoadString(IDS_EXTRACTION_ERROR_TITLE), MB_ICONERROR);
+          ::MessageBoxW(NULL, errorMessage, NWindows::MyLoadString(IDS_EXTRACTION_ERROR_TITLE), MB_ICONERROR | MB_SETFOREGROUND | MB_TOPMOST);
         }
       }
       return 1;
@@ -458,7 +458,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
   const UString friendlyName = GetTextConfigValue(pairs, "Title");
   const UString finishMessage = GetTextConfigValue(pairs, "FinishMessage");
   if (!finishMessage.IsEmpty()){
-    MessageBoxW(NULL, finishMessage, friendlyName, MB_OK | MB_ICONINFORMATION);
+    MessageBoxW(NULL, finishMessage, friendlyName, MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND | MB_TOPMOST);
   }
   return 0;
 }
