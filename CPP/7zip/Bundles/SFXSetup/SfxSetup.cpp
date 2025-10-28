@@ -225,9 +225,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
   UString dirPrefix ("." STRING_PATH_SEPARATOR);
   UString appLaunched, extractDialogText, extractPath;
   bool showProgress = true;
+  CObjectVector<CTextConfigPair> pairs;
   if (!config.IsEmpty())
   {
-    CObjectVector<CTextConfigPair> pairs;
     if (!GetTextConfig(config, pairs))
     {
       if (!assumeYes)
@@ -455,6 +455,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
     ::CloseHandle(hProcess);
   }
 
+  const UString friendlyName = GetTextConfigValue(pairs, "Title");
+  const UString finishMessage = GetTextConfigValue(pairs, "FinishMessage");
   if (!finishMessage.IsEmpty()){
     MessageBoxW(NULL, finishMessage, friendlyName, MB_OK | MB_ICONINFORMATION);
   }
