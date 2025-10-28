@@ -237,6 +237,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
     const UString friendlyName = GetTextConfigValue(pairs, "Title");
     const UString installPrompt = GetTextConfigValue(pairs, "BeginPrompt");
     const UString progress = GetTextConfigValue(pairs, "Progress");
+    const UString finishMessage = GetTextConfigValue(pairs, "FinishMessage");
     extractDialogText = GetTextConfigValue(pairs, "ExtractDialogText");
     UString extractPathText = GetTextConfigValue(pairs, "ExtractPathText");
     UString cancelPrompt = GetTextConfigValue(pairs, "CancelPrompt");
@@ -454,7 +455,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /* hPrevInstance */,
     ::CloseHandle(hProcess);
   }
 
-  MessageBoxW(NULL, L"Success.", L"7-Zip SFX", MB_OK | MB_ICONINFORMATION);
-
+  if (!finishMessage.IsEmpty()){
+    MessageBoxW(NULL, finishMessage, friendlyName, MB_OK | MB_ICONINFORMATION);
+  }
   return 0;
 }
